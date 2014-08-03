@@ -1,0 +1,126 @@
+[user]
+	name = altern
+	email = sergey.shmarkatyuk@gmail.com
+[alias]
+# basic operations
+	cp = cherry-pick
+	st = status -s
+	cl = clone
+	ci = commit
+	co = checkout
+	br = branch 
+	diff = diff --word-diff
+	dc = diff --cached
+# Reset
+	r = reset
+	r1 = reset HEAD^
+	r2 = reset HEAD^^
+	rh = reset --hard
+	rh1 = reset HEAD^ --hard
+	rh2 = reset HEAD^^ --hard
+# Getting rid of uncommitted changes to the working copy
+	discard = checkout -- .
+	rmuntracked = clean -f -d
+# Pushing
+	unpushed = log origin/master..HEAD --pretty=oneline
+	unpusheddiff = diff origin/master..HEAD
+	unpull = reset --hard HEAD@{1}
+	incoming = "!f() { git fetch && git log ..origin/master --oneline; }; f"
+	outgoing = "!f() { git fetch && git log origin/master.. --oneline; }; f"
+# Stash
+	sl = stash list
+	sa = stash apply
+	ss = stash save
+		
+# Unadd files
+	unadd = reset HEAD
+
+# list commits
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+	new = !sh -c 'git log --pretty=format:\"%C(yellow)%h%Cred%d %Creset%s%Cblue [%cn]\" $1@{1}..$1@{0} $@ --decorate' 
+	logtree = log --graph --oneline --decorate --all
+#List aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+	aliases = config --get-regexp ^alias\\.
+
+#Edit gitconfig
+	editconf = !bash -c '"$(echo \"$EDITOR\" ~/.gitconfig);"' 
+
+# List oneline commits showing dates: 
+	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+# List oneline commits showing relative dates:
+	ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+	le = log --oneline --decorate
+
+
+	
+# Diff of the file:
+	filelog = log -u
+	fl = log -u
+# Show modified files in last commit:
+	dl = "!git ll -1"
+
+
+# Merging
+	ours = "!f() { git co --ours $@ && git add $@; }; f"
+	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+	edit-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; vim `f`"
+	add-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; git add `f`"
+
+
+# Show the last tag:
+	lasttag = describe --tags --abbrev=0
+	lt = describe --tags --abbrev=0
+	tagv = "!f() { echo $(sed \"s/'.*'/'"$2"'/\" "$3") > "$3"; git add "$3"; git commit -m \"changed version number in "$3"\"; git tag "$1"/"$2" -f; git push --all; git push --tags; rm -rf "$1"/"$2"; git clone $(git config --get remote.origin.url) "$1"/"$2"; }; f ";
+
+
+# Show a diff last commit: 
+	dlc = diff --cached HEAD
+# Show content (full diff) of a commit given a revision
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+	lc  = "!f() { git ll "$1"^.."$1"; }; f"
+	diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+
+
+
+# Find a file path in codebase
+	f = "!git ls-files | grep -i"
+# Search/grep your entire codebase for a string
+	grep = grep -Ii
+	gr = grep -Ii
+# Grep from root folder
+	gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
+
+
+
+# Assume a file as unchanged
+	assume = update-index --assume-unchanged
+# Unassume a file:
+	unassume = update-index --no-assume-unchanged
+# Show assumed files:
+	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+# Unassume all the assumed files:
+	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
+# Assume all:
+	assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
+
+
+# Checkout tags
+	cot = "!f() { git checkout tags/"$1"; }; f"
+	cotag2dir = "!f() { mkdir -p "$1"; cd "$1"; git checkout tags/"$1"; cd -;}; f"
+	
+# show conflict in gitk
+	gitkconflict = !gitk --left-right HEAD...MERGE_HEAD
+# serve repo on the spot
+	serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
+
+# INFO
+	whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+	
+[push]
+	default = simple
+
+
