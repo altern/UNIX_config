@@ -1,6 +1,8 @@
 [user]
-	name = altern
 	email = sergey.shmarkatyuk@gmail.com
+	name = altern
+[push]
+	default = matching
 [alias]
 # basic operations
 	cp = cherry-pick
@@ -119,8 +121,3 @@
 # INFO
 	whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
 	whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
-	
-[push]
-	default = simple
-
-
